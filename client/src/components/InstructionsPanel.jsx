@@ -9,7 +9,6 @@ const InstructionsPanel = () => {
         <li>Enter your guess – spelling matters!</li>
         <li>Get feedback: ✅ Correct, ❌ Incorrect, or 🔄 Partially correct.</li>
         <li>Solve it in the fewest attempts possible!</li>
-        <li>A new challenge every day with monthly themes.</li>
       </ol>
     </div>
   );
