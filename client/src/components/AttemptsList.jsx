@@ -36,7 +36,7 @@ const AttemptsList = () => {
     <div className="mt-6">
       <h3 className="text-lg font-medium text-gray-800 mb-2">Your Attempts ({attempts.length}/6)</h3>
       {attempts.length > 0 ? (
-        <ul className="space-y-2">
+        <ul className="space-y-2 mb-4">
           {attempts.map((attempt, index) => (
             <li 
               key={index}
