@@ -1,0 +1,111 @@
+/* App.css - Custom styles for Emoji Cipher */
+
+/* Custom Fonts */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* Emoji animations */
+.emoji-bounce {
+  display: inline-block;
+  animation: emoji-bounce 1s infinite;
+}
+
+@keyframes emoji-bounce {
+  0%, 100% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(-15px);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+/* Custom animations for correct/incorrect answers */
+.feedback-animation {
+  animation: feedback-pop 0.3s ease-in-out;
+}
+
+@keyframes feedback-pop {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Celebration animation for winning */
+.celebration {
+  position: relative;
+}
+
+.celebration::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background-image: 
+    radial-gradient(circle, #ff0 8px, transparent 8px),
+    radial-gradient(circle, #f0f 8px, transparent 8px),
+    radial-gradient(circle, #0ff 8px, transparent 8px);
+  background-size: 30px 30px;
+  background-position: 0 0, 10px 10px, 20px 20px;
+  animation: confetti-fall 3s ease-in-out infinite;
+}
+
+@keyframes confetti-fall {
+  0% {
+    background-position: 0 -10px, 10px -10px, 20px -10px;
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    background-position: 0 60px, 10px 70px, 20px 80px;
+    opacity: 0;
+  }
+}
+
+/* Custom focus styles */
+input:focus, button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4);
+}
+
+/* Dark mode support (for future use) */
+@media (prefers-color-scheme: dark) {
+  .dark-mode-support {
+    --bg-primary: #1f2937;
+    --text-primary: #f9fafb;
+    --bg-secondary: #374151;
+    --border-color: #4b5563;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
