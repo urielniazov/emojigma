@@ -3,7 +3,7 @@ import { Sparkles } from 'lucide-react';
 import { useGame } from '../context/GameContext';
 
 const Header = () => {
-  const { currentPuzzle } = useGame();
+  const { currentPuzzle, isLoading } = useGame();
   
   // Get formatted date
   const today = new Date();
@@ -18,7 +18,13 @@ const Header = () => {
       </h1>
       <p className="text-gray-600">Decode the emoji sequence!</p>
       <div className="mt-2 text-sm bg-blue-100 text-blue-800 py-1 px-3 rounded-full inline-block">
-        {currentPuzzle.category} - {month} {day}, {year}
+        {isLoading ? (
+          <span>Loading puzzle...</span>
+        ) : (
+          <span>
+            {currentPuzzle?.category || 'Today\'s Challenge'} - {month} {day}, {year}
+          </span>
+        )}
       </div>
     </header>
   );

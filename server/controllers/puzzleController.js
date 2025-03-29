@@ -13,11 +13,9 @@ exports.getTodaysPuzzle = async (req, res) => {
   try {
     const puzzle = await puzzleService.getTodaysPuzzle();
     
-    // Remove the answer for security
-    const { answer, ...puzzleWithoutAnswer } = puzzle;
     
     return res.json({
-      puzzle: puzzleWithoutAnswer
+      puzzle
     });
   } catch (error) {
     console.error('Error getting puzzle:', error);

@@ -6,9 +6,7 @@ const GuessForm = () => {
     guess, 
     setGuess, 
     checkGuess, 
-    gameStatus, 
-    hintUsed, 
-    handleHint 
+    gameStatus,
   } = useGame();
   
   if (gameStatus !== 'playing') {
@@ -33,15 +31,6 @@ const GuessForm = () => {
           Guess
         </button>
       </div>
-      
-      {!hintUsed && (
-        <button 
-          onClick={handleHint}
-          className="mt-2 text-indigo-600 hover:text-indigo-800 text-sm cursor-pointer"
-        >
-          Need a hint?
-        </button>
-      )}
     </div>
   );
 };
