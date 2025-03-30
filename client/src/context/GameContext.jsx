@@ -114,7 +114,8 @@ ${attempts.map((a) =>
             a.status === 'partial' ? '🔄' :
             '❌'
     ).join(' ')}
-    
+
+Do you think you can guess it?
 Play at https://emojigma.vercel.app/`;
 
         navigator.clipboard.writeText(shareText)

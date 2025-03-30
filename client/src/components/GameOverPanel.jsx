@@ -1,5 +1,6 @@
 import React from 'react';
 import { useGame } from '../context/GameContext';
+import  NextPuzzleCountdown from './NextPuzzleCountdown';
 
 const GameOverPanel = () => {
   const { gameStatus, attempts, currentPuzzle, shareResults } = useGame();
@@ -30,6 +31,8 @@ const GameOverPanel = () => {
           Share Results
         </button>
       </div>
+
+      <NextPuzzleCountdown />
     </div>
   );
 };
