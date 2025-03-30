@@ -11,7 +11,9 @@ const app = express();
 
 // Apply middleware
 app.use(helmet()); // Security headers
-app.use(cors()); // Enable CORS
+app.use(cors({
+  origin: ['https://emojigma.vercel.app', 'http://localhost:5173']
+}));
 app.use(express.json()); // Parse JSON request bodies
 app.use(morgan('dev')); // Request logging
 
