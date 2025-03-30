@@ -115,7 +115,7 @@ ${attempts.map((a) =>
             '❌'
     ).join(' ')}
     
-Play at emojigma.com`;
+Play at https://emojigma.vercel.app/`;
 
         navigator.clipboard.writeText(shareText)
             .then(() => alert('Results copied to clipboard!'))
