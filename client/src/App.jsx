@@ -1,12 +1,16 @@
 import React from 'react';
 import GamePage from './pages/GamePage';
 import { GameProvider } from './context/GameContext';
+import { Analytics } from '@vercel/analytics/react';
 
 function App() {
   return (
-    <GameProvider>
-      <GamePage />
-    </GameProvider>
+    <div>
+      <GameProvider>
+        <GamePage />
+      </GameProvider>
+      <Analytics />
+    </div>
   );
 }
 
