@@ -6,7 +6,7 @@ import GuessForm from '../components/GuessForm';
 import AttemptsList from '../components/AttemptsList';
 import GameOverPanel from '../components/GameOverPanel';
 import Footer from '../components/Footer';
-import NavBar from '../components/Navbar';
+import NavBar from '../components/NavBar';
 
 const GamePage = () => {
   const { isLoading, error } = useGame();
