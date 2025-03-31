@@ -45,16 +45,20 @@ const PuzzleDisplay = () => {
   
   return (
     <div className="text-center mb-4">
-      <div className="flex justify-center space-x-2 text-4xl my-6">
-        {emojis.map((emoji, index) => (
+      <h2 className="text-2xl font-bold text-gray-800 flex items-center justify-center gap-2">
+        {currentPuzzle.category}
+      </h2>
+      <div className="flex justify-center space-x-2 text-4xl my-6 animate-bounce">
+        {currentPuzzle.emojis.trim()}
+        {/* {emojis.map((emoji, index) => (
           <div 
             key={index} 
-            className="inline-block emoji-bounce" 
+            className="inline-block animate-bounce" 
             style={{ animationDelay: `${index * 0.1}s` }}
           >
             {emoji}
           </div>
-        ))}
+        ))} */}
       </div>
     </div>
   );
