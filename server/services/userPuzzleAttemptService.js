@@ -158,8 +158,46 @@ const calculateStreak = async (deviceId) => {
   }
 };
 
+/**
+ * Get leaderboard for today
+ * @param {number} limit - Number of top entries to return
+ * @returns {Promise<Array>} Leaderboard entries
+ */
+const getTodayLeaderboard = async (limit = 10) => {
+  const today = getTodayString();
+  return await userPuzzleAttemptRepository.getLeaderboardByDate(today, limit);
+};
+
+/**
+ * Get user's position on today's leaderboard
+ * @param {string} deviceId - Device identifier
+ * @returns {Promise<Object>} User's position info
+ */
+const getUserLeaderboardPosition = async (deviceId) => {
+  const today = getTodayString();
+  
+  // Get all entries for today
+  const leaderboard = await userPuzzleAttemptRepository.getLeaderboardByDate(today, 1000);
+  
+  // Find user's position
+  const userIndex = leaderboard.findIndex(entry => entry.device_id === deviceId);
+  
+  if (userIndex === -1) {
+    return { onLeaderboard: false };
+  }
+  
+  return {
+    onLeaderboard: true,
+    position: userIndex + 1,
+    totalPlayers: leaderboard.length,
+    entry: leaderboard[userIndex]
+  };
+};
+
 module.exports = {
   recordGuess,
   markAsShared,
-  calculateStreak
+  calculateStreak,
+  getTodayLeaderboard,
+  getUserLeaderboardPosition
 };

@@ -109,9 +109,40 @@ const getUserStats = async (deviceId) => {
   };
 };
 
+/**
+ * Get leaderboard for a specific date
+ * @param {string} date - Date in YYYY-MM-DD format
+ * @param {number} limit - Number of top entries to return
+ * @returns {Promise<Array>} Leaderboard entries
+ */
+const getLeaderboardByDate = async (date, limit = 10) => {
+  const { data, error } = await supabase
+    .from('user_puzzle_attempts')
+    .select(`
+      id,
+      device_id,
+      attempts_count,
+      time_to_solve,
+      completed
+    `)
+    .gt('time_to_solve', 0)
+    .eq('date', date)
+    .eq('completed', true)
+    .order('attempts_count', { ascending: true })
+    .order('time_to_solve', { ascending: true })
+    .limit(limit);
+  
+  if (error) {
+    throw error;
+  }
+  
+  return data;
+};
+
 module.exports = {
   getAttempt,
   createAttempt,
   updateAttempt,
-  getUserStats
+  getUserStats,
+  getLeaderboardByDate
 };
