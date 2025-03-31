@@ -103,3 +103,43 @@ export const fetchUserStreak = async (deviceId) => {
     throw error;
   }
 };
+
+/**
+ * Fetch today's leaderboard
+ * @param {number} limit - Number of entries to fetch
+ * @returns {Promise<Object>} Leaderboard data
+ */
+export const fetchLeaderboard = async (limit = 10) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/leaderboard/today?limit=${limit}`);
+    
+    if (!response.ok) {
+      throw new Error(`Server responded with status: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching leaderboard:', error);
+    throw error;
+  }
+};
+
+/**
+ * Fetch user's position on the leaderboard
+ * @param {string} deviceId - Device identifier
+ * @returns {Promise<Object>} Position data
+ */
+export const fetchUserPosition = async (deviceId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/leaderboard/position/${deviceId}`);
+    
+    if (!response.ok) {
+      throw new Error(`Server responded with status: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching user position:', error);
+    throw error;
+  }
+};
