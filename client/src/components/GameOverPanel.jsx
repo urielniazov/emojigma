@@ -1,9 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useGame } from '../context/GameContext';
 import  NextPuzzleCountdown from './NextPuzzleCountdown';
+import UserStats from './UserStats';
+import { getDeviceId } from '../utils/deviceUtils';
 
 const GameOverPanel = () => {
   const { gameStatus, attempts, currentPuzzle, shareResults } = useGame();
+  const [deviceId] = useState(() => getDeviceId());
 
   if (gameStatus === 'playing' || !currentPuzzle) {
     return null;
@@ -31,7 +34,7 @@ const GameOverPanel = () => {
           Share Results
         </button>
       </div>
-
+      <UserStats deviceId={deviceId} />
       <NextPuzzleCountdown />
     </div>
   );

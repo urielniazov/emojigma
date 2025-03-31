@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { getTodaysPuzzle } from '../services/apiService'; // Adjust the import path as necessary
+import { getTodaysPuzzle, recordGuess, markAsShared, fetchUserStreak } from '../services/apiService';
+import { getDeviceId } from '../utils/deviceUtils';
 
 const GameContext = createContext();
 
@@ -10,6 +11,9 @@ export const GameProvider = ({ children }) => {
     const [guess, setGuess] = useState('');
     const [attempts, setAttempts] = useState([]);
     const [gameStatus, setGameStatus] = useState('playing'); // 'playing', 'won', 'lost'
+    const [deviceId] = useState(() => getDeviceId());
+    const [streak, setStreak] = useState(0);
+    const [statsTimestamp, setStatsTimestamp] = useState(0);
 
     // Get today's date in YYYY-MM-DD format for localStorage
     const getTodayString = () => {
@@ -30,9 +34,10 @@ export const GameProvider = ({ children }) => {
                 const savedState = localStorage.getItem(`emojiCipher_${todayString}`);
 
                 if (savedState) {
-                    const { attempts, gameStatus } = JSON.parse(savedState);
+                    const { attempts, gameStatus, streak } = JSON.parse(savedState);
                     setAttempts(attempts);
                     setGameStatus(gameStatus);
+                    if (streak !== undefined) setStreak(streak);
                 }
 
                 setIsLoading(false);
@@ -52,15 +57,15 @@ export const GameProvider = ({ children }) => {
             localStorage.setItem(`emojiCipher_${getTodayString()}`, JSON.stringify({
                 attempts,
                 gameStatus,
+                streak,  // Make sure streak is included here
             }));
         }
-    }, [attempts, gameStatus]);
+    }, [attempts, gameStatus, streak]); 
 
-    // src/context/GameContext.js - update the checkGuess function
-    const checkGuess = () => {
-        if (!guess.trim() || !currentPuzzle?.answer) return;
+    const checkGuess = async () => {
+        if (!guess.trim() || !currentPuzzle?.id) return;
 
-        // Client-side validation against the answer provided by the backend
+        // Client-side validation first
         const normalizedGuess = guess.trim().toLowerCase();
         const normalizedAnswer = currentPuzzle.answer.toLowerCase();
 
@@ -86,23 +91,40 @@ export const GameProvider = ({ children }) => {
             status = 'incorrect';
         }
 
-        // Create new attempt
+        // Create new attempt for local state
         const newAttempt = { guess, status };
         const newAttempts = [...attempts, newAttempt];
 
-        // Update state
+        // Update local state
         setAttempts(newAttempts);
         setGuess('');
 
         if (status === 'correct') {
             setGameStatus('won');
+            setStreak(prev => prev + 1);
         } else if (newAttempts.length >= 6) {
             // If they've made 6 attempts and still haven't won, they lose
             setGameStatus('lost');
         }
+
+        // Record guess on the server - do this after updating local state
+        // so the UI doesn't wait for the network request
+        try {
+            await recordGuess(deviceId, currentPuzzle.id, guess, status);
+
+            // If correct, update streak from server
+            if (isCorrect) {
+                const { streak: streakData } = await fetchUserStreak(deviceId);
+                setStreak(streakData.currentStreak);
+                setStatsTimestamp(Date.now());
+            }
+        } catch (error) {
+            console.error('Error saving guess to server:', error);
+            // Continue with local state even if server request fails
+        }
     };
 
-    const shareResults = () => {
+    const shareResults = async () => {
         const didSolve = gameStatus === 'won';
 
         const shareText = `Emojigma
@@ -110,17 +132,52 @@ ${didSolve ? `I solved today's puzzle in ${attempts.length} tries!` : `I couldn'
 ${currentPuzzle?.emojis}
     
 ${attempts.map((a) =>
-        a.status === 'correct' ? '✅' :
-            a.status === 'partial' ? '🔄' :
-            '❌'
-    ).join(' ')}
+            a.status === 'correct' ? '✅' :
+                a.status === 'partial' ? '🔄' :
+                    '❌'
+        ).join(' ')}
 
 Do you think you can guess it?
 Play at https://emojigma.vercel.app/`;
 
-        navigator.clipboard.writeText(shareText)
-            .then(() => alert('Results copied to clipboard!'))
-            .catch(err => console.error('Failed to copy: ', err));
+        let shared = false;
+
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Emojigma Results',
+                    text: shareText
+                });
+                shared = true;
+            } catch (err) {
+                if (err.name !== 'AbortError') {
+                    // If user didn't cancel sharing
+                    navigator.clipboard.writeText(shareText)
+                        .then(() => {
+                            alert('Results copied to clipboard!');
+                            shared = true;
+                        })
+                        .catch(err => console.error('Failed to copy: ', err));
+                }
+            }
+        } else {
+            try {
+                await navigator.clipboard.writeText(shareText);
+                alert('Results copied to clipboard!');
+                shared = true;
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+            }
+        }
+
+        // If shared successfully, update server
+        if (shared && currentPuzzle?.id) {
+            try {
+                await markAsShared(deviceId, currentPuzzle.id);
+            } catch (error) {
+                console.error('Error marking as shared:', error);
+            }
+        }
     };
 
     return (
@@ -133,7 +190,9 @@ Play at https://emojigma.vercel.app/`;
             attempts,
             gameStatus,
             checkGuess,
-            shareResults
+            shareResults,
+            streak,
+            statsTimestamp
         }}>
             {children}
         </GameContext.Provider>
