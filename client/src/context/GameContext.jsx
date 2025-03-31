@@ -128,7 +128,6 @@ export const GameProvider = ({ children }) => {
 
         const shareText = `Emojigma
 ${didSolve ? `I solved today's puzzle in ${attempts.length} tries!` : `I couldn't solve today's puzzle :(`}
-${currentPuzzle?.emojis}
     
 ${attempts.map((a) =>
             a.status === 'correct' ? '✅' :
