@@ -120,7 +120,6 @@ export const GameProvider = ({ children }) => {
             }
         } catch (error) {
             console.error('Error saving guess to server:', error);
-            // Continue with local state even if server request fails
         }
     };
 
@@ -170,7 +169,6 @@ Play at https://emojigma.vercel.app/`;
             }
         }
 
-        // If shared successfully, update server
         if (shared && currentPuzzle?.id) {
             try {
                 await markAsShared(deviceId, currentPuzzle.id);
