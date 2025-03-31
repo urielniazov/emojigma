@@ -1,6 +1,5 @@
 import React from 'react';
 import { useGame } from '../context/GameContext';
-import { splitEmojiString } from '../utils/emojiUtils';
 
 const PuzzleDisplay = () => {
   const { currentPuzzle, isLoading, error } = useGame();
@@ -40,9 +39,6 @@ const PuzzleDisplay = () => {
     );
   }
   
-  // Only proceed with splitting emojis if we have a valid puzzle
-  const emojis = splitEmojiString(currentPuzzle.emojis);
-  
   return (
     <div className="text-center mb-4">
       <h2 className="text-2xl font-bold text-gray-800 flex items-center justify-center gap-2">
@@ -50,15 +46,6 @@ const PuzzleDisplay = () => {
       </h2>
       <div className="flex justify-center space-x-2 text-4xl my-6 animate-bounce">
         {currentPuzzle.emojis.trim()}
-        {/* {emojis.map((emoji, index) => (
-          <div 
-            key={index} 
-            className="inline-block animate-bounce" 
-            style={{ animationDelay: `${index * 0.1}s` }}
-          >
-            {emoji}
-          </div>
-        ))} */}
       </div>
     </div>
   );
