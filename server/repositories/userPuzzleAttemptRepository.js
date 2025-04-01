@@ -125,7 +125,7 @@ const getLeaderboardByDate = async (date, limit = 10) => {
       time_to_solve,
       completed
     `)
-    .gt('time_to_solve', 0)
+    .gt('time_to_solve', -1)
     .eq('date', date)
     .eq('completed', true)
     .order('attempts_count', { ascending: true })

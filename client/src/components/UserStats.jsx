@@ -1,4 +1,3 @@
-// src/components/game/UserStats.js
 import React, { useEffect, useState } from 'react';
 import { fetchUserStreak } from '../services/apiService';
 import { useGame } from '../context/GameContext';
