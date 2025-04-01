@@ -121,7 +121,7 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
         </div>
 
         <div className="p-4 border-t text-center text-gray-600 text-sm">
-          {deviceId && userPosition && !userPosition.onLeaderboard && <span className="mb-1">  You're Possition is <b>#{userPosition.position}</b>.</span>}
+          {userPosition && !userPosition.onLeaderboard && userPosition.position && <span className="mb-1">  You're Possition is <b>#{userPosition.position}</b>.</span>}
           <span className="flex items-center justify-center gap-1">
             <span className="bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded">Coming Soon</span>
             Sign in to customize your display name and save your progress across devices.
