@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Trophy, HelpCircle } from 'lucide-react';
+import { Trophy, HelpCircle, MessageCircle } from 'lucide-react';
 import LeaderboardModal from './LeaderboardModal';
 import InstructionsModal from './InstructionsModal';
+import FeedbackModal from './FeedbackModal';
 
 const NavBar = () => {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
 
   return (
     <>
@@ -19,8 +21,16 @@ const NavBar = () => {
           >
             <Trophy size={24} />
           </button> */}
-          
-          <button 
+
+          <button
+            onClick={() => setShowFeedback(true)}
+            className="text-indigo-600 hover:text-indigo-800 transition-colors"
+            aria-label="Leave Feedback"
+          >
+            <MessageCircle size={24} />
+          </button>
+
+          <button
             onClick={() => setShowInstructions(true)}
             className="text-indigo-600 hover:text-indigo-800 transition-colors"
             aria-label="How to Play"
@@ -31,14 +41,19 @@ const NavBar = () => {
       </nav>
 
       {/* Modals */}
-      <LeaderboardModal 
-        isOpen={showLeaderboard} 
-        onClose={() => setShowLeaderboard(false)} 
+      <LeaderboardModal
+        isOpen={showLeaderboard}
+        onClose={() => setShowLeaderboard(false)}
       />
-      
-      <InstructionsModal 
-        isOpen={showInstructions} 
-        onClose={() => setShowInstructions(false)} 
+
+      <InstructionsModal
+        isOpen={showInstructions}
+        onClose={() => setShowInstructions(false)}
+      />
+
+      <FeedbackModal
+        isOpen={showFeedback}
+        onClose={() => setShowFeedback(false)}
       />
     </>
   );

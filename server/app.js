@@ -8,6 +8,7 @@ const rateLimit = require('express-rate-limit');
 const puzzleRoutes = require('./routes/puzzles');
 const userPuzzleAttemptRoutes = require('./routes/userPuzzleAttempts');
 const leaderboardRoutes = require('./routes/leaderboard');
+const feedbackRoutes = require('./routes/feedbackRoutes');
 
 
 // Create Express app
@@ -39,11 +40,13 @@ app.use(cors({
 }));
 app.use(express.json()); // Parse JSON request bodies
 app.use(morgan('dev')); // Request logging
+app.use(express.urlencoded({ extended: true })); 
 
 // Apply routes
 app.use('/api/puzzles', puzzleRoutes);
 app.use('/api/attempts', userPuzzleAttemptRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 // Apply rate limiters
 app.use('/api/puzzles/today', getLimiter);
@@ -51,6 +54,7 @@ app.use('/api/attempts/streak', getLimiter);
 app.use('/api/leaderboard', getLimiter);
 app.use('/api/attempts/guess', postLimiter);
 app.use('/api/attempts/shared', postLimiter);
+app.use('/api/feedback', postLimiter);
 
 // Root route
 app.get('/', (req, res) => {

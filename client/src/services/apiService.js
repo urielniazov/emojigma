@@ -143,3 +143,31 @@ export const fetchUserPosition = async (deviceId) => {
     throw error;
   }
 };
+
+/**
+ * Submits user feedback to the API
+ * @param {Object} feedbackData - Object containing feedback information
+ * @param {string} feedbackData.feedback - The feedback text content
+ * @param {string} [feedbackData.deviceId] - Optional device identifier
+ * @returns {Promise<Object>} Response data from the server
+ */
+export const submitFeedback = async (feedbackData) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/feedback`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(feedbackData),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Server responded with status: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error submitting feedback:', error);
+    throw error;
+  }
+};
