@@ -14,13 +14,13 @@ const NavBar = () => {
       <nav className="w-full flex justify-between items-center py-3 px-4 bg-white shadow-sm mb-4">
         <div className="flex-1"></div>
         <div className="flex gap-4 flex-1 justify-end">
-          {/* <button 
+          <button
             onClick={() => setShowLeaderboard(true)}
             className="text-indigo-600 hover:text-indigo-800 transition-colors"
             aria-label="Show Leaderboard"
           >
             <Trophy size={24} />
-          </button> */}
+          </button>
 
           <button
             onClick={() => setShowFeedback(true)}
