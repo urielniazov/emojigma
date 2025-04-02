@@ -1,6 +1,5 @@
 {
     "version": 2,
-    "buildCommand": "npm run build",
     "builds": [
       {
         "src": "server/server.js",
@@ -13,11 +12,12 @@
         "dest": "server/server.js"
       },
       {
-        "handle": "filesystem"
-      },
-      {
         "src": "/assets/(.*)",
         "dest": "server/public/assets/$1"
+      },
+      {
+        "src": "/icon.ico",
+        "dest": "server/public/icon.ico"
       },
       {
         "src": "/(.*)",
