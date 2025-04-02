@@ -1,6 +1,6 @@
 # Emojigma 🎭🧩
 
-A daily word puzzle game where players decode phrases, movie titles, or common expressions represented by 5 emojis.
+A daily word puzzle game where players decode phrases represented by emojis.
 
 ## About the Game
 
