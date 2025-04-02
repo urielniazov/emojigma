@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const path = require('path');
 const rateLimit = require('express-rate-limit');
 
 // Import routes
@@ -42,6 +43,11 @@ app.use(express.json()); // Parse JSON request bodies
 app.use(morgan('dev')); // Request logging
 app.use(express.urlencoded({ extended: true })); 
 
+app.get('/_vercel/insights/script.js', (req, res) => {
+  res.setHeader('Content-Type', 'application/javascript');
+  res.send('console.log("Vercel Analytics mock for local development");');
+});
+
 // Apply routes
 app.use('/api/puzzles', puzzleRoutes);
 app.use('/api/attempts', userPuzzleAttemptRoutes);
@@ -56,9 +62,11 @@ app.use('/api/attempts/guess', postLimiter);
 app.use('/api/attempts/shared', postLimiter);
 app.use('/api/feedback', postLimiter);
 
-// Root route
-app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to Emojigma API' });
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Error handling middleware

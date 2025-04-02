@@ -16,36 +16,16 @@ Emojigma challenges players to decode the meaning behind 5 carefully chosen emoj
 
 ## Tech Stack
 
-- **Frontend**: React with modern Hooks and Context API
+- **Frontend**: Vite + React with modern Hooks and Context API
 - **Styling**: Tailwind CSS for responsive design
 - **Database**: Supabase (PostgreSQL)
 - **State Management**: React Context
-- **Deployment**: [Your deployment platform]
-
-## Getting Started
+- **Deployment**: Vercel
 
 ### Prerequisites
 
 - Node.js (v16+)
 - npm or yarn
-
-### Getting Started
-
-1. Install dependencies:
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
-
-2. Start the development server:
-   ```bash
-   npm start
-   # or
-   yarn start
-   ```
-
-3. Open [http://localhost:3000](http://localhost:3000) to view the app
 
 ## Database Setup
 
@@ -68,32 +48,32 @@ CREATE TABLE puzzles (
 );
 ```
 
-**UserProgress**
+**User Attemps**
 ```sql
-CREATE TABLE user_progress (
+CREATE TABLE user_puzzle_attempts (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  device_id TEXT NOT NULL,
-  puzzle_id UUID REFERENCES puzzles(id),
-  date DATE NOT NULL,
+  device_id TEXT,
+  puzzle_id UUID REFERENCES puzzles(id) ON DELETE CASCADE,
+  date DATE,
   completed BOOLEAN DEFAULT false,
-  attempts INTEGER DEFAULT 0,
-  attempts_list JSONB,
-  hints_used BOOLEAN DEFAULT false,
-  last_played TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  UNIQUE(device_id, puzzle_id, date)
+  attempts_count INT4 DEFAULT 0,
+  attempts_data JSONB,
+  time_to_solve INT4,
+  shared BOOLEAN DEFAULT false,
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now()
 );
 ```
 
-**Analytics**
+**Feedbacks**
 ```sql
-CREATE TABLE analytics (
-  date DATE PRIMARY KEY,
-  puzzle_id UUID REFERENCES puzzles(id),
-  daily_active_users INTEGER DEFAULT 0,
-  new_users INTEGER DEFAULT 0,
-  total_plays INTEGER DEFAULT 0,
-  completion_rate NUMERIC DEFAULT 0,
-  avg_attempts NUMERIC DEFAULT 0
+CREATE TABLE public.feedback (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  content TEXT NOT NULL,
+  device_id VARCHAR(255),
+  status VARCHAR(50) DEFAULT 'new',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 ```
 
@@ -115,11 +95,14 @@ CREATE TABLE analytics (
 - Game progress is saved to continue across sessions
 
 ## Todo List
-
-- [ ] Work on backend
-- [ ] Create Supabase project
-- [ ] Publish the game
-- [ ] Post on LinkedIn
+- [x] Complete frontend
+- [x] Work on backend
+- [x] Create Supabase project
+- [x] Publish the game
+- [x] Post on LinkedIn
+- [x] Create leaderboard
+- [x] Create how to & feedback
+- [ ] Implement Google auth via [supabase](https://medium.com/@hasnainsayyed833/implement-google-authentication-in-react-js-using-supabase-7cf9f397f778)
 
 ## License
 
