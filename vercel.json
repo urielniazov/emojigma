@@ -12,16 +12,8 @@
         "dest": "server/server.js"
       },
       {
-        "src": "/assets/(.*)",
-        "dest": "server/public/assets/$1"
-      },
-      {
-        "src": "/icon.ico",
-        "dest": "server/public/icon.ico"
-      },
-      {
         "src": "/(.*)",
-        "dest": "server/public/index.html"
+        "dest": "server/server.js"
       }
     ]
   }

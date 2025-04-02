@@ -2,8 +2,8 @@
     "name": "emojigma",
     "version": "1.0.0",
     "scripts": {
-      "build": "npm run build:client && npm run copy-client",
-      "build:client": "cd client && npm install && npm run build",
-      "copy-client": "mkdir -p server/public && cp -r client/dist/* server/public/"
+        "build": "npm run build:client && npm run copy-client",
+        "build:client": "cd client && npm install && npm run build",
+        "copy-client": "mkdir -p server/public && cp -r client/dist/* server/public/"
     }
-  }
+}
