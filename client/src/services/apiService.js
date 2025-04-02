@@ -1,7 +1,7 @@
 // Simplified API Service for Emojigma - only fetches the daily puzzle
 
 // Base URL - change this to your deployed server URL in production
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:2481/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 /**
  * Get today's puzzle from the server
