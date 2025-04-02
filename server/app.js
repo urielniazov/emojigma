@@ -43,11 +43,12 @@ app.use(express.json()); // Parse JSON request bodies
 app.use(morgan('dev')); // Request logging
 app.use(express.urlencoded({ extended: true })); 
 
-app.get('/_vercel/insights/script.js', (req, res) => {
-  res.setHeader('Content-Type', 'application/javascript');
-  res.send('console.log("Vercel Analytics mock for local development");');
-});
-
+if (process.env.NODE_ENV === 'development') {
+  app.get('/_vercel/insights/script.js', (req, res) => {
+    res.setHeader('Content-Type', 'application/javascript');
+    res.send('console.log("Vercel Analytics mock for local development");');
+  });
+}
 // Apply routes
 app.use('/api/puzzles', puzzleRoutes);
 app.use('/api/attempts', userPuzzleAttemptRoutes);
