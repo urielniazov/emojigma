@@ -1,6 +1,7 @@
 # Emojigma 🎭🧩
 
 A daily word puzzle game where players decode phrases represented by emojis.
+[Play here](https://emojigma.vercel.app/)
 
 ## About the Game
 
