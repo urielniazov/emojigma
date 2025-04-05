@@ -12,7 +12,6 @@ const dailyPuzzleCache = require('../utils/dailyPuzzleCache');
  */
 const getTodaysPuzzle = async () => {
   const today = getTodayString();
-  console.log('Getting today\'s puzzle:', today);
   // Try to get from cache first
   const cachedPuzzle = dailyPuzzleCache.getTodaysPuzzle(today);
   if (cachedPuzzle) {
