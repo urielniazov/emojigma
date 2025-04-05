@@ -61,6 +61,7 @@ app.use('/api/attempts/streak', getLimiter);
 app.use('/api/leaderboard', getLimiter);
 app.use('/api/attempts/guess', postLimiter);
 app.use('/api/attempts/shared', postLimiter);
+app.use('/api/attempts/start', postLimiter);
 app.use('/api/feedback', postLimiter);
 
 

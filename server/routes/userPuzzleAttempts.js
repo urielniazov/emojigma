@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const userPuzzleAttemptController = require('../controllers/userPuzzleAttemptController');
+const validatePuzzleId = require('../middlewares/validatePuzzleId');
 
-// Record a guess
-router.post('/guess', userPuzzleAttemptController.recordGuess);
+// Apply validation middleware to routes that need puzzle ID validation
+router.post('/guess', validatePuzzleId, userPuzzleAttemptController.recordGuess);
+router.post('/shared', validatePuzzleId, userPuzzleAttemptController.markAsShared);
+router.post('/start', validatePuzzleId, userPuzzleAttemptController.startAttempt);
 
-// Mark as shared
-router.post('/shared', userPuzzleAttemptController.markAsShared);
-
-// Get user streak
+// These routes don't need puzzle validation
 router.get('/streak/:deviceId', userPuzzleAttemptController.getUserStreak);
 
 module.exports = router;

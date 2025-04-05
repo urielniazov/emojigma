@@ -10,9 +10,12 @@ const UserStats = ({ deviceId }) => {
     completionRate: 0
   });
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     const loadStats = async () => {
+      // Only proceed if we have a deviceId
+      if (!deviceId) return;
+
       try {
         setLoading(true);
         const { streak } = await fetchUserStreak(deviceId);
@@ -21,23 +24,21 @@ const UserStats = ({ deviceId }) => {
           totalCompleted: 0,
           completionRate: 0
         });
-        setLoading(false);
       } catch (error) {
         console.error('Error loading stats:', error);
         // On error, keep using default values
+      } finally {
         setLoading(false);
       }
     };
-    
-    if (deviceId) {
-      loadStats();
-    }
+
+    loadStats();
   }, [deviceId, statsTimestamp]);
-  
+
   if (loading) {
     return <div className="text-center">Loading stats...</div>;
   }
-  
+
   return (
     <div className="mt-4 p-3 bg-indigo-50 rounded-lg">
       <h4 className="text-indigo-800 font-medium mb-2">Your Stats</h4>

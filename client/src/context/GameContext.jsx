@@ -64,15 +64,14 @@ export const GameProvider = ({ children }) => {
 
     const checkGuess = async () => {
         if (!guess.trim() || !currentPuzzle?.id) return;
-
-        // Client-side validation first
-        const normalizedGuess = guess.trim().toLowerCase();
-        const normalizedAnswer = currentPuzzle.answer.toLowerCase();
-
+    
+        const normalizedGuess = guess.trim().toLowerCase().replace(/^(the|a|an) /i, '').trim();
+        const normalizedAnswer = currentPuzzle.answer.toLowerCase().replace(/^(the|a|an) /i, '').trim();
+    
         // Determine if the guess is correct
         let status;
         let isCorrect = false;
-
+    
         if (normalizedGuess === normalizedAnswer) {
             status = 'correct';
             isCorrect = true;
@@ -90,15 +89,15 @@ export const GameProvider = ({ children }) => {
         } else {
             status = 'incorrect';
         }
-
+    
         // Create new attempt for local state
         const newAttempt = { guess, status };
         const newAttempts = [...attempts, newAttempt];
-
+    
         // Update local state
         setAttempts(newAttempts);
         setGuess('');
-
+    
         if (status === 'correct') {
             setGameStatus('won');
             setStreak(prev => prev + 1);
@@ -106,12 +105,12 @@ export const GameProvider = ({ children }) => {
             // If they've made 6 attempts and still haven't won, they lose
             setGameStatus('lost');
         }
-
+    
         // Record guess on the server - do this after updating local state
         // so the UI doesn't wait for the network request
         try {
             await recordGuess(deviceId, currentPuzzle.id, guess, status);
-
+    
             // If correct, update streak from server
             if (isCorrect) {
                 const { streak: streakData } = await fetchUserStreak(deviceId);

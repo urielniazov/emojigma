@@ -83,3 +83,29 @@ exports.getUserStreak = async (req, res) => {
     });
   }
 };
+
+exports.startAttempt = async (req, res) => {
+  try {
+    const { deviceId, puzzleId } = req.body;
+
+    if (!deviceId || !puzzleId) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    await userPuzzleAttemptService.startAttempt(deviceId, puzzleId);
+    
+    // Return a simple success response
+    return res.json({ 
+      success: true,
+      message: 'Attempt started successfully'
+    });
+  } catch (error) {
+    console.error('Error starting attempt:', error);
+    return res.status(500).json({
+      success: false,
+      error: true,
+      message: 'Failed to start attempt',
+      details: process.env.NODE_ENV === 'production' ? {} : error
+    });
+  }
+};

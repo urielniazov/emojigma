@@ -171,3 +171,35 @@ export const submitFeedback = async (feedbackData) => {
     throw error;
   }
 };
+
+/**
+ * Start a puzzle attempt
+ * @param {string} deviceId - Device identifier
+ * @param {string} puzzleId - Puzzle ID
+ * @returns {Promise<Object>} Created attempt data
+ */
+export const startAttempt = async (deviceId, puzzleId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/attempts/start`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ deviceId, puzzleId }),
+    });
+    
+    if (response.status === 429) {
+      const errorData = await response.text();
+      throw new Error(`Rate limit exceeded: ${errorData}`);
+    }
+    
+    if (!response.ok) {
+      throw new Error(`Server responded with status: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error starting attempt:', error);
+    throw error;
+  }
+};
