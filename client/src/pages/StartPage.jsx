@@ -72,7 +72,13 @@ const StartPage = () => {
       <div className="bg-white rounded-lg shadow-md p-8 text-center max-w-md w-full">
         <img src={logo} alt="Emojigma Logo" className="mx-auto mb-6" />
         <h1 className="text-3xl font-bold mb-4">Emojigma</h1>
-        <p className="text-gray-600 mb-8">Get 6 chances to guess the emoji sequence</p>
+        <p className="text-gray-600 mb-4">Get 6 chances to guess the emoji sequence</p>
+        
+        {/* Timer info */}
+        <p className="text-sm text-gray-500 mb-8">
+          ⏱️ Once you start, a timer will track how quickly you solve the puzzle!
+        </p>
+        
         <button
           onClick={handleStartGame}
           className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition-colors"

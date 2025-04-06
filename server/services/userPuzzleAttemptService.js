@@ -13,22 +13,31 @@ const startAttempt = async (deviceId, puzzleId) => {
   // Check if attempt already exists
   let attempt = await userPuzzleAttemptRepository.getAttempt(deviceId, puzzleId, today);
 
-  if (!attempt) {
-    // Create new attempt record with timestamp but no guesses yet
-    const newAttempt = {
-      device_id: deviceId,
-      puzzle_id: puzzleId,
-      date: today,
-      completed: false,
-      attempts_count: 0,
-      attempts_data: [],
-      time_to_solve: null
-    };
-
-    attempt = await userPuzzleAttemptRepository.createAttempt(newAttempt);
+  // Case 1: Attempt exists but user hasn't made any tries yet
+  if (attempt && attempt.attempts_data.length === 0) {
+     // Reset the timer by updating the updated_at timestamp
+    // We're passing an empty updates object because your updateAttempt function
+    // already sets updated_at to the current time
+    return await userPuzzleAttemptRepository.updateAttempt(attempt.id, {});
   }
-
-  return attempt;
+  
+  // Case 2: Attempt exists with tries
+  if (attempt) {
+    return attempt;
+  }
+  
+  // Case 3: No attempt exists, create new one
+  const newAttempt = {
+    device_id: deviceId,
+    puzzle_id: puzzleId,
+    date: today,
+    completed: false,
+    attempts_count: 0,
+    attempts_data: [],
+    time_to_solve: null
+  };
+  
+  return await userPuzzleAttemptRepository.createAttempt(newAttempt);
 };
 
 /**
@@ -66,7 +75,7 @@ const recordGuess = async (deviceId, puzzleId, guess, status) => {
     // If correct and not previously completed, record time to solve
     if (isCorrect && !attempt.completed && !attempt.time_to_solve) {
       // Calculate time from first attempt to now
-      const firstAttemptTime = new Date(attempt.created_at).getTime();
+      const firstAttemptTime = new Date(attempt.updated_at).getTime();
       const solveTime = Math.floor((new Date().getTime() - firstAttemptTime) / 1000);
       updates.time_to_solve = solveTime;
     }
